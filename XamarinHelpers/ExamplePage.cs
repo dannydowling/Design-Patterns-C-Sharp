@@ -6,6 +6,8 @@ namespace XamarinHelpers
     {
         public ExamplePage()
         {
+            //Be sure that the image file is in the drawable/resources folder in Android/iOS.
+
             var Exit = new PictureAsButton();
             Exit.Icon = "MenuExit.png";
             Exit.Label = "Exit";
@@ -64,6 +66,7 @@ namespace XamarinHelpers
             //    heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height; }));
             //};
 
+            //because we are using a zoomable view, we need to scroll.
             Content = new ScrollView
             {
                 BackgroundColor = Color.White,

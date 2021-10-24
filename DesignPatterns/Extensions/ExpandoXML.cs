@@ -1,12 +1,12 @@
 ﻿
-    using System.Collections.Generic;
-    using System.Dynamic;
-    using System.Linq;
-    using System.Xml.Linq;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Xml.Linq;
 
-    namespace DesignPatterns.Extensions
-    {
-        public static class ExpandoXml
+namespace DesignPatterns.Extensions
+{
+    public static class ExpandoXml
         {
             public static dynamic AsExpando(this XDocument document)
             {
