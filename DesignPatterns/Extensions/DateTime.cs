@@ -40,7 +40,7 @@ namespace DesignPatterns.Extensions
             return list.Take(list.Count - 1).First();
         }
 
-        public static DateTime MostRecentDateTime(this List<DateTime> list)
+        public static DateTime MostRecentFutureDateTime(this List<DateTime> list)
         {
             DateTime baseTime = DateTime.Now;
             list.Add(baseTime);
@@ -49,6 +49,21 @@ namespace DesignPatterns.Extensions
 
             DateTime result = new DateTime();
             for (DateTime i = baseTime; i < list.OldestDateTime(); TimeSpan.FromSeconds(1))
+            {
+                result = list.Where(x => x.Equals(i)).First();
+            }
+            return result;
+        }
+
+        public static DateTime MostRecentPastDateTime(this List<DateTime> list)
+        {
+            DateTime baseTime = DateTime.Now;
+            list.Add(baseTime);
+            //sort Ascending
+            list.Sort((a, b) => a.CompareTo(b));
+
+            DateTime result = new DateTime();
+            for (DateTime i = baseTime; i < list.EarliestDateTime(); TimeSpan.FromSeconds(-1))
             {
                 result = list.Where(x => x.Equals(i)).First();
             }
