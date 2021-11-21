@@ -43,7 +43,7 @@ namespace DesignPatterns.Patterns
                 if (comparison < 0) //if the thing is in the left list
                 {
                    //we're going to drop the right list.
-                    for (int l = left.Count()/2; l < left.Count() - 1; l++)
+                    for (int l = left.Count()/2; l < left.Count() - 1; l--)
                     {
                         right.Add(l, left[l]); //adding in all the last indexers from the left to the right
                         left.Remove(l);
