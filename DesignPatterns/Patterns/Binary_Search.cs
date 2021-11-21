@@ -42,7 +42,7 @@ namespace DesignPatterns.Patterns
 
                 if (comparison < 0) //if the thing is in the left list
                 {
-                   right = left; //we're going to drop the right list.
+                   //we're going to drop the right list.
                     for (int l = left.Count()/2; l < left.Count() - 1; l++)
                     {
                         right.Add(l, left[l]); //adding in all the last indexers from the left to the right
@@ -52,7 +52,7 @@ namespace DesignPatterns.Patterns
                 }
                 else //or the item's in the right list
                 {
-                    left = right; //we're going to drop the right list.
+                    //we're going to drop the right list.
                     for (int r = left.Count() / 2; r < right.Count() - 1; r++)
                     {
                         left.Add(r, right[r]); //adding in all the last indexers from the right to the left
