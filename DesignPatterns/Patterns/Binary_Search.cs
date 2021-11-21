@@ -13,39 +13,39 @@ namespace DesignPatterns.Patterns
         private T BinarySearch<T>(IEnumerable<T> list, T key) where T : IComparable
         {
             //First we'll sort the enumeration into a new structure so we can find anything in it
-            SortedList<int, T> allT = new SortedList<int, T>();
+            SortedList<int, T> sortedListT = new SortedList<int, T>();
 
             for (int i = 0; i < list.Count() - 1; i++)
             {
-                allT.Add(i, list.ElementAt(i));
+                sortedListT.Add(i, list.ElementAt(i));
             }
 
             //we want to split this up to make searching faster
             SortedList<int, T> left = new SortedList<int, T>();
             SortedList<int, T> right = new SortedList<int, T>();
 
-            for (int i = 0; i < allT.Count(); i++)
+            for (int i = 0; i < sortedListT.Count(); i++)
             {
                 if (i < list.Count() /2)
                 {
-                    left.Add(i, allT.ElementAt(i).Value);
+                    left.Add(i, sortedListT.ElementAt(i).Value);
                 }
                 else
                 {
-                    right.Add(i, allT.ElementAt(i).Value);
+                    right.Add(i, sortedListT.ElementAt(i).Value);
                 }
             }
             
 
             // start in the middle of the list
-            for (int i = allT.Count() / 2; i < allT.Count() - 1; i++)
+            for (int i = sortedListT.Count() / 2; i < sortedListT.Count() - 1; i++)
             {
-                T item = allT.ElementAt(i).Value;  
+                T item = sortedListT.ElementAt(i).Value;  
 
                 var comparison = key.CompareTo(item); 
                 if (comparison == 0)
                 {
-                    return allT.ElementAt(i).Value;  //if it's the one selected, then return
+                    return sortedListT.ElementAt(i).Value;  //if it's the one selected, then return
                 }
 
                 if (comparison < 0) //if the thing is in the left list
