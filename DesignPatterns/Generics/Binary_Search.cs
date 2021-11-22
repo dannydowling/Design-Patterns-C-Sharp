@@ -10,7 +10,7 @@ namespace DesignPatterns.Patterns
 {
     internal class Binary_Search
     {
-        private T BinarySearch<T>(IEnumerable<T> list, T key) where T : IComparable
+        internal T BinarySearch<T>(IEnumerable<T> list, T key) where T : IComparable
         {
             //First we'll sort the enumeration into a new structure so we can find anything in it
             SortedList<int, T> sortedListT = new SortedList<int, T>();
@@ -30,7 +30,9 @@ namespace DesignPatterns.Patterns
                 {  right.Add(i, sortedListT.ElementAt(i).Value); }
             }            
             
-            for (int i = sortedListT.Count() / 2; i < sortedListT.Count() - 1; i++) // start in the middle of the list
+            // the unreachable code in the loop below is because we're only iterating on half the list.
+
+            for (int i = sortedListT.Count() / 2; i < sortedListT.Count() - 1; i++) 
             {
                 T item = sortedListT.ElementAt(i).Value;  
 
