@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesignPatterns.Extensions
 {
-    static internal class NullReporter
+    static internal class Not_Null
     {
         //if you call this on a type,
         //such as:
