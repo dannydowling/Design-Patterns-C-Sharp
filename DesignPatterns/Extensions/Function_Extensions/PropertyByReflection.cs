@@ -9,8 +9,8 @@ namespace DesignPatterns.Extensions.Function_Extensions
     {
         private static string line;
 
-        public static dynamic find<T>(this T resourceToFind) { return findAsString(resourceToFind.ToString()); }
-        private static dynamic findAsString(dynamic resourceFileName)
+        public static dynamic findTypeFromProperty<T>(this T resourceToFind) { return findType(resourceToFind.ToString()); }
+        private static Type findType(dynamic resourceFileName)
         {
             using (StreamReader reader = GetEmbeddedResourceStream(Assembly.GetCallingAssembly(), resourceFileName))
             {
@@ -18,11 +18,11 @@ namespace DesignPatterns.Extensions.Function_Extensions
                 {
                     if (line.Contains(resourceFileName))
                     {
-                        return line;
+                        return resourceFileName.GetType();
                     }
                 }
             }
-            return "";
+            return null;
         }
 
         private static dynamic GetEmbeddedResourceStream(Assembly assembly, dynamic resourceFileName)
