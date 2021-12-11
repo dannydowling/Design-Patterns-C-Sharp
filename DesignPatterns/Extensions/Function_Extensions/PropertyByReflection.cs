@@ -31,7 +31,7 @@ namespace DesignPatterns.Extensions.Function_Extensions
             var resourcePaths = resourceNames
                 .Where(x => x.DeclaredProperties == resourceFileName)
                 .ToArray();
-            return assembly.GetManifestResourceStream(resourcePaths.Single().ToString());
+            return assembly.GetManifestResourceStream(resourcePaths.Single().GetType().ToString());
         }
     }
 }
