@@ -22,11 +22,10 @@ namespace DesignPatterns.Extensions
         public static Additives FindAdditives(object[] numbers, object k)
         {
             var kStrung = k.GetHashCode();           
-            HashSet<object> set = new HashSet<object>();
             SortedSet<int> sortedNumbers = new SortedSet<int>();
             foreach(var number in numbers)
             {
-                sortedNumbers.Add (numbers.GetHashCode());
+                sortedNumbers.Add(number.GetHashCode());
             }
 
             var hashSet = new HashSet<object>();
