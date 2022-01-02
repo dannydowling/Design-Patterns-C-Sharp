@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DesignPatterns
 {
@@ -7,7 +8,11 @@ namespace DesignPatterns
     {
         public Interpreter()
         {
-       
+            //The interpreter pattern can be used to solve simple problems that
+            //keep on occuring, by creating a new language and interpreting the
+            //problem by that language. Think of Regex as an interpreter pattern for
+            //matching strings.
+
             InterpreterContext context = new InterpreterContext();
 
             // Usually a tree 

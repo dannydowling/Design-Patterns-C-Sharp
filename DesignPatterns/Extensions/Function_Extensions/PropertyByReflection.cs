@@ -9,16 +9,16 @@ namespace DesignPatterns.Extensions.Function_Extensions
     {
         private static string line;
 
-        public static dynamic findTypeFromProperty<T>(this T resourceToFind) { return findType(resourceToFind.ToString()); }
-        private static Type findType(dynamic resourceFileName)
+        public static dynamic findTypeFromProperty<T>(this T propertyToFind) { return findType(propertyToFind.ToString()); }
+        private static Type findType(dynamic propertyToFind)
         {
-            using (StreamReader reader = GetEmbeddedResourceStream(Assembly.GetCallingAssembly(), resourceFileName))
+            using (StreamReader reader = GetEmbeddedResourceStream(Assembly.GetCallingAssembly(), propertyToFind))
             {
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (line.Contains(resourceFileName))
+                    if (line.Contains(propertyToFind))
                     {
-                        return resourceFileName.GetType();
+                        return propertyToFind.GetType();
                     }
                 }
             }
@@ -27,11 +27,11 @@ namespace DesignPatterns.Extensions.Function_Extensions
 
         private static dynamic GetEmbeddedResourceStream(Assembly assembly, dynamic resourceFileName)
         {
-            var resourceNames = assembly.DefinedTypes;
-            var resourcePaths = resourceNames
+            var definedTypes = assembly.DefinedTypes;
+            var definedProperties = definedTypes
                 .Where(x => x.DeclaredProperties == resourceFileName)
                 .ToArray();
-            return assembly.GetManifestResourceStream(resourcePaths.Single().GetType().ToString());
+            return assembly.GetManifestResourceStream(definedProperties.Single().GetType().ToString());
         }
     }
 }
