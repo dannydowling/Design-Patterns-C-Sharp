@@ -10,20 +10,20 @@ namespace DesignPatterns.Sorting
         {
             string input = string.Empty;
             Console.WriteLine("Input an expression, for example: (2.11*-3*(5+7.18+9.23))+---1+++(-+-+--(1+2))*(-+-3+4)*(5+6)+3*(2+1)");
-            input = Console.ReadLine() as string;  
+            input = Console.ReadLine() as string;
             {
                 try
                 {
                     Interpreter interpreter = new Interpreter(input);
                     Expression node = interpreter.Parse();
-                    
+
                     Console.WriteLine(string.Format("Tree graph:{0}{1}", Environment.NewLine, node.Accept(new GraphBuilder())));
                     Console.WriteLine(string.Format("Value: {0}", node.Accept(new ValueBuilder())));
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                }                
+                }
             }
         }
     }
@@ -87,10 +87,10 @@ namespace DesignPatterns.Sorting
 
             while (currentToken.Type == TokenType.Multiply || currentToken.Type == TokenType.Divide)
             {
-                Token @operator = currentToken;
+                Token operation = currentToken;
                 NextToken();
                 Expression right = GrabFactor();
-                left = new BinaryOperation(@operator, left, right);
+                left = new BinaryOperation(operation, left, right);
             }
 
             return left;
@@ -105,12 +105,12 @@ namespace DesignPatterns.Sorting
             }
             else if (currentToken.Type == TokenType.LeftParenthesis)
             {
-                Expression node = this.GrabBracketExpr();
+                Expression node = GrabBracketExpr();
                 return node;
             }
             else
             {
-                Token token = this.ExpectToken(TokenType.Number);
+                Token token = ExpectToken(TokenType.Number);
                 NextToken();
                 return new Num(token);
             }
@@ -131,7 +131,7 @@ namespace DesignPatterns.Sorting
 
             NextToken();
 
-            if (this.currentToken.Type == TokenType.Plus || currentToken.Type == TokenType.Minus)
+            if (currentToken.Type == TokenType.Plus || currentToken.Type == TokenType.Minus)
             {
                 Expression expr = GrabUnaryExpr();
                 return new UnaryOp(op, expr);
@@ -155,103 +155,82 @@ namespace DesignPatterns.Sorting
 
         private void NextToken()
         {
-            if (currentChar == char.MinValue)
+            switch (currentChar)
             {
-                currentToken = Token.None();
-                return;
-            }
-
-            if (this.currentChar == ' ')
-            {
-                while (currentChar != char.MinValue && currentChar == ' ')
-                {
-                    this.Advance();
-                }
-
-                if (currentChar == char.MinValue)
-                {
+                case char.MinValue:
                     currentToken = Token.None();
-                    return;
-                }
-            }
+                    break;
 
-            if (currentChar == '+')
-            {
-                currentToken = new Token(TokenType.Plus, currentChar.ToString());
-                Advance();
-                return;
-            }
-
-            if (currentChar == '-')
-            {
-                currentToken = new Token(TokenType.Minus, currentChar.ToString());
-                Advance();
-                return;
-            }
-
-            if (currentChar == '*')
-            {
-                currentToken = new Token(TokenType.Multiply, currentChar.ToString());
-                Advance();
-                return;
-            }
-
-            if (currentChar == '/')
-            {
-                currentToken = new Token(TokenType.Divide, currentChar.ToString());
-                Advance();
-                return;
-            }
-
-            if (currentChar == '(')
-            {
-                currentToken = new Token(TokenType.LeftParenthesis, currentChar.ToString());
-                Advance();
-                return;
-            }
-
-            if (currentChar == ')')
-            {
-                currentToken = new Token(TokenType.RightParenthesis, currentChar.ToString());
-                Advance();
-                return;
-            }
-
-            if (currentChar >= '0' && currentChar <= '9')
-            {
-                string num = string.Empty;
-                while (currentChar >= '0' && currentChar <= '9')
-                {
-                    num += currentChar.ToString();
-                    Advance();
-                }
-
-                if (currentChar == '.')
-                {
-                    num += currentChar.ToString();
-                    Advance();
-
-                    if (currentChar >= '0' && currentChar <= '9')
+                case ' ':
+                    while (currentChar != char.MinValue && currentChar == ' ')
                     {
-                        while (currentChar >= '0' && currentChar <= '9')
+                        Advance();
+                    }
+                    break;
+                case '+':
+                    currentToken = new Token(TokenType.Plus, currentChar.ToString());
+                    Advance();
+                    break;
+                case '-':
+                    currentToken = new Token(TokenType.Minus, currentChar.ToString());
+                    Advance();
+                    break;
+                case '*':
+                    currentToken = new Token(TokenType.Multiply, currentChar.ToString());
+                    Advance();
+                    break;
+                case '/':
+                    currentToken = new Token(TokenType.Divide, currentChar.ToString());
+                    Advance();
+                    break;
+                case '(':
+                    currentToken = new Token(TokenType.LeftParenthesis, currentChar.ToString());
+                    Advance();
+                    break;
+                case ')':
+                    currentToken = new Token(TokenType.RightParenthesis, currentChar.ToString());
+                    Advance();
+                    break;
+
+                default:
+                    break;
+            }
+            string number = string.Empty;
+            try
+            {
+
+                if (currentChar >= '0' && currentChar <= '9')
+                {
+                    while (currentChar >= '0' && currentChar <= '9')
+                    {
+                        number += currentChar.ToString();
+                        Advance();
+                    }
+
+                    if (currentChar == '.')
+                    {
+                        number += currentChar.ToString();
+                        Advance();
+
+                        if (currentChar >= '0' && currentChar <= '9')
                         {
-                            num += currentChar.ToString();
+
+                            number += currentChar.ToString();
                             Advance();
                         }
                     }
-                    else
-                    {
-                        throw new Exception(string.Format("Invalid syntax at position {0}. Unexpected symbol {1}.", currentPosition, currentChar));
-                    }
                 }
-
-                currentToken = new Token(TokenType.Number, num);
-                return;
             }
 
-            throw new Exception(string.Format("Invalid syntax at position {0}. Unexpected symbol {1}.", currentPosition, currentChar));
-        }
+            catch (Exception)
+            {
 
+                string.Format("Invalid syntax at position {0}. Unexpected symbol {1}.", currentPosition, currentChar);
+
+            }
+            currentToken = new Token(TokenType.Number, number);
+            return;
+        }
         private void Advance()
         {
             currentPosition += 1;
@@ -267,7 +246,7 @@ namespace DesignPatterns.Sorting
         }
     }
 
-       
+
     internal class ValueBuilder : INodeVisitor
     {
         public object VisitBinOp(Token op, INode left, INode right)
@@ -311,7 +290,7 @@ namespace DesignPatterns.Sorting
 
         public Num(Token token)
         {
-            this.Token = token;
+            Token = token;
         }
 
         override public object Accept(INodeVisitor visitor)
@@ -327,13 +306,13 @@ namespace DesignPatterns.Sorting
 
         public UnaryOp(Token op, Expression node)
         {
-            this.Op = op;
-            this.Node = node;
+            Op = op;
+            Node = node;
         }
 
         override public object Accept(INodeVisitor visitor)
         {
-            return visitor.VisitUnaryOp(this.Op, this.Node);
+            return visitor.VisitUnaryOp(Op, Node);
         }
     }
 
@@ -345,14 +324,14 @@ namespace DesignPatterns.Sorting
 
         public BinaryOperation(Token op, Expression left, Expression right)
         {
-            this.Op = op;
-            this.Left = left;
-            this.Right = right;
+            Op = op;
+            Left = left;
+            Right = right;
         }
 
         override public object Accept(INodeVisitor visitor)
         {
-            return visitor.VisitBinOp(this.Op, this.Left, this.Right);
+            return visitor.VisitBinOp(Op, Left, Right);
         }
     }
 }

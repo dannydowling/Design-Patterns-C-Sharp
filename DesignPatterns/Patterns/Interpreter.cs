@@ -13,21 +13,24 @@ namespace DesignPatterns
             //problem by that language. Think of Regex as an interpreter pattern for
             //matching strings.
 
+            
             InterpreterContext context = new InterpreterContext();
 
             // Usually a tree 
 
             List<AbstractExpression> list = new List<AbstractExpression>();
 
-            // Populate 'abstract syntax tree' 
+            // this is constructing an abstract tree
 
+            
             list.Add(new TerminalExpression());
+            
             list.Add(new NonterminalExpression());
+
             list.Add(new TerminalExpression());
             list.Add(new TerminalExpression());
 
-            // Interpret
-
+            
             foreach (AbstractExpression exp in list)
             {
                 exp.Interpret(context);
@@ -38,6 +41,7 @@ namespace DesignPatterns
     }
     public class InterpreterContext
     {
+        // contains information that is global to the interpreter
     }
 
     public abstract class AbstractExpression
@@ -50,12 +54,14 @@ namespace DesignPatterns
     {
         public override void Interpret(InterpreterContext context)
         {
+            // terminal symbols in the language to interpret
             Console.WriteLine("Called Terminal.Interpret()");
         }
     }
 
     public class NonterminalExpression : AbstractExpression
     {
+        // alternation, repetition and sequential expressions in the language are nonterminal.        
         public override void Interpret(InterpreterContext context)
         {
             Console.WriteLine("Called Nonterminal.Interpret()");
