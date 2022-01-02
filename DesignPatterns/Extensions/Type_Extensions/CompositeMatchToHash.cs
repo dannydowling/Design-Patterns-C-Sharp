@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DesignPatterns.Extensions
 {
-    public static class AddToK
+    public static class CompositeMatchToHash
     {
         public static T FactorOfK<T>(this T k, object[] candidates) where T : IComparable<T>
         {
@@ -22,18 +22,18 @@ namespace DesignPatterns.Extensions
         public static Additives FindAdditives(object[] numbers, object k)
         {
             var kStrung = k.GetHashCode();           
-            SortedSet<int> sortedNumbers = new SortedSet<int>();
+            SortedSet<int> sortedHashes = new SortedSet<int>();
             foreach(var number in numbers)
             {
-                sortedNumbers.Add(number.GetHashCode());
+                sortedHashes.Add(number.GetHashCode());
             }
 
             var hashSet = new HashSet<object>();
             
-            foreach (var num in sortedNumbers)
+            foreach (var hash in sortedHashes)
             {
-                var op1 = num;
-                var op2 = Math.Abs(kStrung - num);
+                var op1 = hash;
+                var op2 = Math.Abs(kStrung - hash);
 
                 if (hashSet.Contains(op2))
                     return new Additives(op1, op2);

@@ -21,5 +21,10 @@ namespace DesignPatterns.Extensions
             }
             return value;
         }
+
+        public static string GetEmptyStringIfNull(this string val)
+        {
+            return (val != null ? val.Trim() : "");
+        }
     }
 }
