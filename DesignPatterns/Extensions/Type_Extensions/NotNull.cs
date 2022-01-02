@@ -22,6 +22,8 @@ namespace DesignPatterns.Extensions
             return value;
         }
 
+        // this is to return an empty string if the string references as null.
+
         public static string GetEmptyStringIfNull(this string val)
         {
             return (val != null ? val.Trim() : "");

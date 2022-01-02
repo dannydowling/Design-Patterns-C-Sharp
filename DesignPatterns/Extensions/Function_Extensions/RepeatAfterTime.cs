@@ -5,13 +5,12 @@ namespace DesignPatterns.Extensions
 {
     public static class TimedReplay
     {
-        public static dynamic RepeatAfterTime (RuntimeMethodHandle runtimeMethod, double t)
+        public static dynamic RepeatAfterTime (this RuntimeMethodHandle runtimeMethod, double t)
         {
             
             Timer timer = new Timer (t);
            timer.Elapsed += Timer_Elapsed;
             return runtimeMethod;
-            
         }
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
