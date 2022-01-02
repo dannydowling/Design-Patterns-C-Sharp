@@ -5,7 +5,7 @@ namespace DesignPatterns.Extensions
 {
     public static class AddToK
     {
-        public static dynamic FactorOfK(this object k, object[] candidates)
+        public static T FactorOfK<T>(this T k, object[] candidates) where T : IComparable<T>
         {
             return compareToK(candidates, k);
         }
