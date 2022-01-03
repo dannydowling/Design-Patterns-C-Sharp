@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DesignPatterns.Extensions
 {
-    public static class CompositeMatchToHash
+    public static class Composite_Match_To_Hash
     {
         // this compares the hashes of the objects in an array to an object passed in.
         // if there's a match, it will write out and return the objects that when composited together, 
