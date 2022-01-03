@@ -48,7 +48,7 @@ namespace DesignPatterns.Extensions.Type_Extensions
         // check if a string is a number
         public static bool IsNumber(this string val)
         {
-            
+
             double retNum;
             bool isNum = double.TryParse(val, NumberStyles.Any, NumberFormatInfo.InvariantInfo, out retNum);
             return isNum;
@@ -140,19 +140,19 @@ namespace DesignPatterns.Extensions.Type_Extensions
             var occurences = Regex.Matches(val, stringToMatch, RegexOptions.IgnoreCase);
 
             for (int i = 0; i < occurences.Count; i++)
-            {                
+            {
                 if (i / 2 == 0)
                 {
-                   var alternationMatch1 = Regex.Matches(val, stringToMatch, RegexOptions.IgnoreCase);
-                    for (int a = 0; a < alternationMatch1.Count /2; a*=2)
-                    {                        
+                    var alternationMatch1 = Regex.Matches(val, stringToMatch, RegexOptions.IgnoreCase);
+                    for (int a = 0; a < alternationMatch1.Count / 2; a *= 2)
+                    {
                         Regex.Replace(val, stringToMatch, alternate1);
-                    }                    
+                    }
                 }
                 else
                 {
                     var alternationMatch2 = Regex.Matches(val, stringToMatch, RegexOptions.IgnoreCase);
-                    for (int b = 1; b < alternationMatch2.Count /2; b *= 2)
+                    for (int b = 1; b < alternationMatch2.Count / 2; b *= 2)
                     {
                         Regex.Replace(val, stringToMatch, alternate2);
                     }
@@ -194,6 +194,26 @@ namespace DesignPatterns.Extensions.Type_Extensions
             return Regex.Match(val,
                 @"(?:^|\s)([a-z]{3,6}(?=://))?(://)?((?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.(?:25[0-5]|2[0-4]\d|[01]?\d\d?))(?::(\d{2,5}))?(?:\s|$)")
                 .Success;
+        }
+        public static bool IsValidIPv6(this string val)
+        {
+            if (string.IsNullOrEmpty(val))
+            {
+                return false;
+            }
+            return Regex.Match(val,
+                @"(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+                .Success;
+        }
+
+        public static bool IsValidIP(this string val)
+        {
+            bool isValid = false;
+            
+            if (!IsValidIPv4(val))
+            { return isValid = IsValidIPv6(val); }
+            else
+            { return isValid = true; }           
         }
 
         // figure out the size of converting to another encoding
