@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace XamarinHelpers.Helpers
 {
+    //https://indy.codes/strings-are-evil
+    //trying to make this generic and with dynamic criteria for input into what (for) and where to search.
+
     internal class ReadLinesandCommaSplit
     {
         private static ArrayPool<byte>? _arrayPool;
