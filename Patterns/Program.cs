@@ -5,7 +5,7 @@ namespace DesignPatterns
     internal class Program
     {
         static void Main()
-        {     
+        {
             Console.WriteLine("Test the design pattern in the code with one of the following options...");
             Console.WriteLine("0: Abstract Factory");
             Console.WriteLine("1: Adapter");
@@ -33,7 +33,7 @@ namespace DesignPatterns
             Console.WriteLine("");
             Console.WriteLine("Please enter your selection:");
 
-           
+
             var arg = int.Parse(Console.ReadLine());
 
             switch (arg)
