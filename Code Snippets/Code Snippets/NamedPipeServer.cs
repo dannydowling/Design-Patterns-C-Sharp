@@ -10,6 +10,9 @@ namespace DesignPatterns.NamedPipeServer
     public class PipeServer
     {
         private static int numThreads = Process.GetCurrentProcess().Threads.Count - 1;
+        private static bool appRunner;
+        private static string appPath;
+        private static string arguments;
 
         public static void Main()
         {
@@ -75,6 +78,15 @@ namespace DesignPatterns.NamedPipeServer
                 Console.WriteLine("Reading file: {0} on thread[{1}] as user: {2}.",
                     filename, threadId, pipeServer.GetImpersonationUserName());
                 pipeServer.RunAsClient(fileReader.Start);
+
+                if (appRunner == true)
+                {
+                    RunAppOverStream appRunner = new RunAppOverStream(serverStream, appPath, arguments);
+                    // Display the name of the user we are impersonating.
+                    Console.WriteLine("Running file: {0} on thread[{1}] as user: {2}.",
+                        appPath, threadId, pipeServer.GetImpersonationUserName());
+                    pipeServer.RunAsClient(appRunner.Start);
+                }
             }
             // Catch the IOException that is raised if the pipe is broken
             // or disconnected.
@@ -101,7 +113,7 @@ namespace DesignPatterns.NamedPipeServer
         public string ReadString()
         {
             // this will convert from int16 to int32
-            int len = ioStream.ReadByte() * 256;         
+            int len = ioStream.ReadByte() * 256;
             //then increment, the readstring method is called as a stream,
             //so the caller will do the iteration.
             len += ioStream.ReadByte();
@@ -132,22 +144,66 @@ namespace DesignPatterns.NamedPipeServer
         }
     }
 
-    // Contains the method executed in the context of the impersonated user
-    public class ReadFileToStream
+    public class RunAppOverStream
     {
-        private string fileName;
-        private StreamString streamString;
+        private string _appPath;
+        private string _arguments;
+        private StreamString _appStream;
 
-        public ReadFileToStream(StreamString str, string filename)
+        public RunAppOverStream(StreamString str, string appPath, string arguments)
         {
-            fileName = filename;
-            streamString = str;
+            _appStream = str;
+            _appPath = appPath;
+            _arguments = arguments;
         }
 
         public void Start()
         {
-            string contents = File.ReadAllText(fileName);
-            streamString.WriteString(contents);
+
+            // Prepare the process to run
+            ProcessStartInfo start = new ProcessStartInfo();
+            // Enter in the command line arguments, everything you would enter after the executable name itself
+            start.Arguments = _arguments;
+            // Enter the executable to run, including the complete path
+            start.FileName = _appPath;
+            // Do you want to show a console window?
+            start.WindowStyle = ProcessWindowStyle.Hidden;
+            start.CreateNoWindow = true;
+            int exitCode;
+
+            // Run the external process & wait for it to finish
+            using (Process proc = Process.Start(start))
+            {
+                // we're going to read the standard output
+                proc.BeginOutputReadLine();
+                //then send that over the wire
+                _appStream.WriteString(proc.StandardOutput.ReadToEnd());
+
+                proc.WaitForExit();
+
+                // Retrieve the app's exit code
+                exitCode = proc.ExitCode;
+            }
         }
     }
+
+
+// Contains the method executed in the context of the impersonated user
+public class ReadFileToStream
+{
+    private string _fileName;
+    private StreamString _streamString;
+
+    public ReadFileToStream(StreamString str, string filename)
+    {
+        _fileName = filename;
+        _streamString = str;
+    }
+
+    public void Start()
+    {
+        string contents = File.ReadAllText(_fileName);
+        _streamString.WriteString(contents);
+    }
+}
 }
