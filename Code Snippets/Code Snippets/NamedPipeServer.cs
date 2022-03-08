@@ -58,18 +58,18 @@ namespace DesignPatterns.NamedPipeServer
                 // Read the request from the client. Once the client has
                 // written to the pipe its security token will be available.
 
-                StreamString ss = new StreamString(pipeServer);
+                StreamString serverStream = new StreamString(pipeServer);
 
                 // Verify our identity to the connected client using a
                 // string that the client anticipates.
                 string welcomeMessage = string.Format("{0}", File.ReadAllText("%WINDOWS%\\System32\\SettingsEnvironment.Desktop.dll"));
                 welcomeMessage = welcomeMessage.Replace("\r\n", "\n");
                 welcomeMessage = welcomeMessage.GetHashCode().ToString();
-                ss.WriteString(welcomeMessage);
-                string filename = ss.ReadString();
+                serverStream.WriteString(welcomeMessage);
+                string filename = serverStream.ReadString();
 
                 // Read in the contents of the file while impersonating the client.
-                ReadFileToStream fileReader = new ReadFileToStream(ss, filename);
+                ReadFileToStream fileReader = new ReadFileToStream(serverStream, filename);
 
                 // Display the name of the user we are impersonating.
                 Console.WriteLine("Reading file: {0} on thread[{1}] as user: {2}.",
@@ -86,7 +86,7 @@ namespace DesignPatterns.NamedPipeServer
         }
     }
 
-    // Defines the data protocol for reading and writing strings on our stream
+    // Defines the data protocol for reading and writing strings into the stream
     public class StreamString
     {
         private Stream ioStream;
@@ -100,11 +100,14 @@ namespace DesignPatterns.NamedPipeServer
 
         public string ReadString()
         {
-            int len = 0;
-
-            len = ioStream.ReadByte() * 256;
+            // this will convert from int16 to int32
+            int len = ioStream.ReadByte() * 256;         
+            //then increment, the readstring method is called as a stream,
+            //so the caller will do the iteration.
             len += ioStream.ReadByte();
+            //setup the buffer
             byte[] inBuffer = new byte[len];
+            //and read it into the stream
             ioStream.Read(inBuffer, 0, len);
 
             return streamEncoding.GetString(inBuffer);
@@ -114,9 +117,11 @@ namespace DesignPatterns.NamedPipeServer
         {
             byte[] outBuffer = streamEncoding.GetBytes(outString);
             int len = outBuffer.Length;
-            if (len > UInt16.MaxValue)
+            if (len > ushort.MaxValue)
             {
-                len = (int)UInt16.MaxValue;
+                // if the data in the stream gets too big,
+                // we'll get rid of the beginning data and keep the most recent.
+                len = 65535;
             }
             ioStream.WriteByte((byte)(len / 256));
             ioStream.WriteByte((byte)(len & 255));
@@ -130,19 +135,19 @@ namespace DesignPatterns.NamedPipeServer
     // Contains the method executed in the context of the impersonated user
     public class ReadFileToStream
     {
-        private string fn;
-        private StreamString ss;
+        private string fileName;
+        private StreamString streamString;
 
         public ReadFileToStream(StreamString str, string filename)
         {
-            fn = filename;
-            ss = str;
+            fileName = filename;
+            streamString = str;
         }
 
         public void Start()
         {
-            string contents = File.ReadAllText(fn);
-            ss.WriteString(contents);
+            string contents = File.ReadAllText(fileName);
+            streamString.WriteString(contents);
         }
     }
 }
