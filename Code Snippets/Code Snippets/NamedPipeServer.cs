@@ -13,14 +13,19 @@ namespace DesignPatterns.NamedPipeServer
         private static bool appRunner;
         private static string appPath;
         private static string arguments;
+        private static string filename;
 
         public static void Main()
         {
-            int i;
+            
             Thread[] servers = new Thread[numThreads];
 
             Console.WriteLine("\n*** Named pipe server stream with impersonation example ***\n");
+
+           
+            
             Console.WriteLine("Waiting for client connect...\n");
+            int i;
             for (i = 0; i < numThreads; i++)
             {
                 servers[i] = new Thread(ServerThread);
@@ -69,23 +74,51 @@ namespace DesignPatterns.NamedPipeServer
                 welcomeMessage = welcomeMessage.Replace("\r\n", "\n");
                 welcomeMessage = welcomeMessage.GetHashCode().ToString();
                 serverStream.WriteString(welcomeMessage);
-                string filename = serverStream.ReadString();
 
-                // Read in the contents of the file while impersonating the client.
-                ReadFileToStream fileReader = new ReadFileToStream(serverStream, filename);
+                Console.WriteLine("Would you like to run an app on the client or read a file?");
+                Console.WriteLine("Enter App for running an App, otherwise a file read will occur");
+                if (Console.ReadLine() == "App")
+                {
+                    appRunner = true;
+                    Console.WriteLine("\n*Please enter the remote path of the app to be run: *\n");
+                    appPath = Console.ReadLine();
+                }
+                else
+                {
+                    appRunner = false;
+                    Console.WriteLine("\n*Please enter the remote path of the app to be run: *\n");
+                    filename = Console.ReadLine();
+                }
 
-                // Display the name of the user we are impersonating.
-                Console.WriteLine("Reading file: {0} on thread[{1}] as user: {2}.",
-                    filename, threadId, pipeServer.GetImpersonationUserName());
-                pipeServer.RunAsClient(fileReader.Start);
+                if (appRunner == false) {
+                    // Read in the contents of the file while impersonating the client.
+                    ReadFileToStream fileReader = new ReadFileToStream(serverStream, filename);
 
-                if (appRunner == true)
+                    // Display the name of the user we are impersonating.
+                    Console.WriteLine("Reading file: {0} on thread[{1}] as user: {2}.",
+                        filename, threadId, pipeServer.GetImpersonationUserName());
+                    pipeServer.RunAsClient(fileReader.Start);
+                }         
+
+                else if (appRunner == true)
                 {
                     RunAppOverStream appRunner = new RunAppOverStream(serverStream, appPath, arguments);
                     // Display the name of the user we are impersonating.
                     Console.WriteLine("Running file: {0} on thread[{1}] as user: {2}.",
                         appPath, threadId, pipeServer.GetImpersonationUserName());
                     pipeServer.RunAsClient(appRunner.Start);
+                }
+
+                else
+                {
+                     filename = serverStream.ReadString();
+                    // Read in the contents of the file while impersonating the client.
+                    ReadFileToStream fileReader = new ReadFileToStream(serverStream, filename);
+
+                    // Display the name of the user we are impersonating.
+                    Console.WriteLine("Reading file: {0} on thread[{1}] as user: {2}.",
+                        filename, threadId, pipeServer.GetImpersonationUserName());
+                    pipeServer.RunAsClient(fileReader.Start);
                 }
             }
             // Catch the IOException that is raised if the pipe is broken
