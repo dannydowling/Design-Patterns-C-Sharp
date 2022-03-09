@@ -86,10 +86,10 @@ namespace DesignPatterns.NamedPipeServer
                 else
                 {
                     appRunner = false;
-                    Console.WriteLine("\n*Please enter the remote path of the app to be run: *\n");
+                    Console.WriteLine("\n*Please enter the remote path of the file to be streamed: *\n");
                     filename = Console.ReadLine();
                 }
-
+                // if a file is to be read
                 if (appRunner == false) {
                     // Read in the contents of the file while impersonating the client.
                     ReadFileToStream fileReader = new ReadFileToStream(serverStream, filename);
@@ -99,7 +99,7 @@ namespace DesignPatterns.NamedPipeServer
                         filename, threadId, pipeServer.GetImpersonationUserName());
                     pipeServer.RunAsClient(fileReader.Start);
                 }         
-
+                // if an app is specified to be run
                 else if (appRunner == true)
                 {
                     RunAppOverStream appRunner = new RunAppOverStream(serverStream, appPath, arguments);
@@ -108,7 +108,7 @@ namespace DesignPatterns.NamedPipeServer
                         appPath, threadId, pipeServer.GetImpersonationUserName());
                     pipeServer.RunAsClient(appRunner.Start);
                 }
-
+                // if the stream requests the file
                 else
                 {
                      filename = serverStream.ReadString();
