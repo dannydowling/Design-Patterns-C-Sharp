@@ -12,6 +12,8 @@ namespace Windows_Runtime_Examples.Example_Code
         SuspendingDeferral? deferral;
         SuspendingOperation? _operation;
 
+        // The SuspendingOperation is a implementation of SuspendingDeferral.
+        // There's a lot of code implemented behind the scenes to make this work.
     
             private async void Defer_Execution(SuspendingOperation operation, Task t)
         {
