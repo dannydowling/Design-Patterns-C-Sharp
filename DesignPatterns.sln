@@ -5,17 +5,19 @@ VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xamarin", "XamarinHelpers\Xamarin.csproj", "{91D72834-49C3-4C4C-BB87-4E6EFB031729}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Checking", "Checking\Checking.csproj", "{9D25F192-AC60-49E8-9E90-5AA70CBD2A72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checking", "Checking\Checking.csproj", "{9D25F192-AC60-49E8-9E90-5AA70CBD2A72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{07E9B698-94A6-480B-A25F-17864157804A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "Extensions\Extensions.csproj", "{07E9B698-94A6-480B-A25F-17864157804A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patterns", "Patterns\Patterns.csproj", "{829B2055-2ED5-4496-8BED-5068D01A8077}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Patterns", "Patterns\Patterns.csproj", "{829B2055-2ED5-4496-8BED-5068D01A8077}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Searching", "Searching\Searching.csproj", "{FB4121D2-4A08-4BBA-8F53-D38D9A3B91E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Searching", "Searching\Searching.csproj", "{FB4121D2-4A08-4BBA-8F53-D38D9A3B91E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorting", "Sorting\Sorting.csproj", "{764E2F04-2794-4D40-842A-D8E4A9E1DFF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sorting", "Sorting\Sorting.csproj", "{764E2F04-2794-4D40-842A-D8E4A9E1DFF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Code Snippets", "Code Snippets\Code Snippets.csproj", "{538A7885-2157-421F-8873-477EDDA1B543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Code Snippets", "Code Snippets\Code Snippets.csproj", "{538A7885-2157-421F-8873-477EDDA1B543}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows Forms Patterns", "Windows Runtime Examples\Windows Forms Patterns.csproj", "{737255AB-9CB8-4551-8B69-5075B8855CE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +173,26 @@ Global
 		{538A7885-2157-421F-8873-477EDDA1B543}.Release|x64.Build.0 = Release|Any CPU
 		{538A7885-2157-421F-8873-477EDDA1B543}.Release|x86.ActiveCfg = Release|Any CPU
 		{538A7885-2157-421F-8873-477EDDA1B543}.Release|x86.Build.0 = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|ARM.Build.0 = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|x64.Build.0 = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Debug|x86.Build.0 = Debug|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|ARM.ActiveCfg = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|ARM.Build.0 = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|ARM64.Build.0 = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|x64.ActiveCfg = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|x64.Build.0 = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|x86.ActiveCfg = Release|Any CPU
+		{737255AB-9CB8-4551-8B69-5075B8855CE4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

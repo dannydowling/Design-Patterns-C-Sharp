@@ -21,9 +21,6 @@ namespace DesignPatterns.NamedPipeServer
             Thread[] servers = new Thread[numThreads];
 
             Console.WriteLine("\n*** Named pipe server stream with impersonation example ***\n");
-
-           
-            
             Console.WriteLine("Waiting for client connect...\n");
             int i;
             for (i = 0; i < numThreads; i++)
