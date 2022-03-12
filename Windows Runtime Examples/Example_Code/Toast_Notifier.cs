@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
@@ -11,12 +13,42 @@ namespace Windows_Runtime_Examples.Example_Code
 {
     internal static  class Toast_Notifier
     {
+        public static string NameOfCallingClass(this Task task)
+        {
+            string fullName;
+            Type? declaringType;
+            int skipFrames = 2;
+            try
+            {
+                // going to offset the stackframe to capture the method that called this execution
+                MethodBase? method = new StackFrame(skipFrames, false).GetMethod();
+
+                declaringType = method.DeclaringType;
+                if (declaringType == null)
+                {
+                    return method.Name;
+                }
+                skipFrames++;
+                // the declaring type is the class that called the method.
+                fullName = declaringType.FullName;
+
+                // we're looking for the first class that isn't in mscorlib, meaning a custom class.
+                while (declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase)) ;
+
+                return fullName;
+            }
+            catch (AccessViolationException)
+            {
+                Console.WriteLine("The thread context has changed");
+                return task.NameOfCallingClass();
+            }
+        }
         public static void NotifyOnCompletion(this Task task, DateTime offset)
         {
             // TODO:
             //get the class name of the parent using reflection and compose that into the toast message
 
-            string taskName = task.Id.ToString();
+            string taskName = task.NameOfCallingClass();
 
             // If background task is already registered, do nothing
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
