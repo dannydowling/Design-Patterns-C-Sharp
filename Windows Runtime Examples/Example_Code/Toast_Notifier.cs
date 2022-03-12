@@ -45,9 +45,6 @@ namespace Windows_Runtime_Examples.Example_Code
         }
         public static void NotifyOnCompletion(this Task task, DateTime offset)
         {
-            // TODO:
-            //get the class name of the parent using reflection and compose that into the toast message
-
             string taskName = task.NameOfCallingClass();
 
             // If background task is already registered, do nothing
