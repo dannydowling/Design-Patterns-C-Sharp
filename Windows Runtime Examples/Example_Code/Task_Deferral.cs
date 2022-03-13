@@ -30,19 +30,24 @@ namespace Windows_Runtime_Examples.Example_Code
         }
     }
 
+    class EventArgs<T> : EventArgs
+    {
+        public T Value { get; private set; }
+        public EventArgs(T val)
+        {
+            Value = val;
+        }
+    }
+
     internal class Save_State_With_Deferral
     {
+        public event EventHandler<SuspendingEventArgs> methodPassed;
+
+
         public Save_State_With_Deferral(RuntimeMethodHandle s, RuntimeArgumentHandle e)
         {
-            // error is that it can't convert from RuntimeArgumentHandle to SuspendedEventArgs
-            OnSuspendingEvent(s, e);            
-        }
-
-        private void Lock_ArgumentArray(RuntimeArgumentHandle e)
-        {
-            Array resultArray = Array.Empty<object>();
-            resultArray.CopyTo(e, 0);
-            lock (resultArray) ;
+            methodPassed += (o, e) => OnSuspendingEvent(s, e);
+        
         }
 
         private Dictionary<string, object> _suspended_State = new Dictionary<string, object>();
