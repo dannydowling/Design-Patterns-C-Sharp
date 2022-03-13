@@ -30,6 +30,7 @@ namespace Windows_Runtime_Examples.Example_Code
         }
     }
 
+    // we're overriding the EventArgs class so that we can send it the delegate
     class EventArgs<T> : EventArgs
     {
         public T Value { get; private set; }
@@ -41,11 +42,13 @@ namespace Windows_Runtime_Examples.Example_Code
 
     internal class Save_State_With_Deferral
     {
+        // the event handler that gets called whenever the OnSuspending Event is called
         public event EventHandler<SuspendingEventArgs> methodPassed;
 
 
         public Save_State_With_Deferral(RuntimeMethodHandle s, RuntimeArgumentHandle e)
         {
+            // here's where we raise the event, passing in the event args from the handles.
             methodPassed += (o, e) => OnSuspendingEvent(s, e);
         
         }
