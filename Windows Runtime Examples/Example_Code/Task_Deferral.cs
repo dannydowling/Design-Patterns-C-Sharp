@@ -49,8 +49,7 @@ namespace Windows_Runtime_Examples.Example_Code
         public Save_State_With_Deferral(RuntimeMethodHandle s, RuntimeArgumentHandle e)
         {
             // here's where we raise the event, passing in the event args from the handles.
-            methodPassed += (o, e) => OnSuspendingEvent(s, e);
-        
+            methodPassed += (o, e) => OnSuspendingEvent(s, e);        
         }
 
         private Dictionary<string, object> _suspended_State = new Dictionary<string, object>();
