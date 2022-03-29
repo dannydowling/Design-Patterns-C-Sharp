@@ -6,6 +6,7 @@ namespace DesignPatterns.Extensions.Function_Extensions
 {
     public static class Encrypt
     {
+        //use ByRSA for small things before the stream, use ByAES for large things in stream.
         public static string ByRSA<T>(this T objectToEncrypt, string key) where T: IFormattable
         {
             CspParameters cspParameter = new CspParameters { KeyContainerName = key };
@@ -14,23 +15,23 @@ namespace DesignPatterns.Extensions.Function_Extensions
             return BitConverter.ToString(bytes);
         }
 
-        public static string ByAES<T>(this T objectToEncrypt, string key) where T: IFormattable
+        public static string ByAES<T>(this T objectToEncrypt, T key) where T: IFormattable
         {
-            byte[] iv = new byte[16];
+            byte[] initVector = new byte[16];
             byte[] array;
 
             using (Aes aes = Aes.Create())
             {
-                aes.Key = Encoding.UTF8.GetBytes(key);
-                aes.IV = iv;
+                aes.Key = key.ObjectToByteArray();
+                aes.IV = initVector;
 
                 ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                     {
-                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
+                        using (StreamWriter streamWriter = new StreamWriter(cryptoStream))
                         {
                             streamWriter.Write(objectToEncrypt);
                         }
@@ -39,36 +40,32 @@ namespace DesignPatterns.Extensions.Function_Extensions
                     }
                 }
             }
-
             return Convert.ToBase64String(array);
         } 
     }
 
     public static class Decrypt { 
 
-        public static string ByRSA<T>(string key , T objectToDecrypt) where T: IFormattable
+        public static T ByRSA<T>(string key , T cypherObject) where T: IFormattable
         {
             CspParameters cspParamters = new CspParameters { KeyContainerName = key };
             RSACryptoServiceProvider rsaServiceProvider = new RSACryptoServiceProvider(cspParamters) { PersistKeyInCsp = true };
-            //string[] decryptArray = objectToDecrypt.ToString().Split(new[] { "-" }, StringSplitOptions.None);
-            //byte[] decryptByteArray = Array.ConvertAll(decryptArray,
-            //    (s => Convert.ToByte(byte.Parse(s, NumberStyles.HexNumber))));
-
-            byte[] decryptByteArray = objectToDecrypt.ObjectToByteArray();
+         
+            byte[] decryptByteArray = cypherObject.ObjectToByteArray();
             byte[] bytes = rsaServiceProvider.Decrypt(decryptByteArray, true);
-            string result = Encoding.UTF8.GetString(bytes);
+            T result = bytes.ByteArrayToObject<T>();
             return result;
         }
 
         public static string ByAES<T>(string key, T objectToDecrypt) where T: IFormattable
         {
-            byte[] iv = new byte[16];
+            byte[] initVector = new byte[16];
             byte[] buffer = objectToDecrypt.ObjectToByteArray();
 
             using (Aes aes = Aes.Create())
             {
                 aes.Key = Encoding.UTF8.GetBytes(key);
-                aes.IV = iv;
+                aes.IV = initVector;
                 ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
 
                 using (MemoryStream memoryStream = new MemoryStream(buffer))
@@ -83,8 +80,6 @@ namespace DesignPatterns.Extensions.Function_Extensions
                 }
             }
         }
-
-       
     }
 }
 

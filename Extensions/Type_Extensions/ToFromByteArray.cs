@@ -21,7 +21,7 @@ namespace Extensions.Type_Extensions
         }
 
         // Convert a byte array to an Object
-        public static Object ByteArrayToObject<T>(this byte[] arrBytes)
+        public static T ByteArrayToObject<T>(this byte[] arrBytes)
         {
             using (var memStream = new MemoryStream())
             {
@@ -29,7 +29,7 @@ namespace Extensions.Type_Extensions
                 memStream.Write(arrBytes, 0, arrBytes.Length);
                 memStream.Seek(0, SeekOrigin.Begin);
                 var obj = binForm.Deserialize(memStream);
-                return obj;
+                return (T)obj;
             }
         }
     }
