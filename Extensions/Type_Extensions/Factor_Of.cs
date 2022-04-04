@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace DesignPatterns.Extensions
 {
-    public static class Composite_Match_To_Hash
+    public static class Factor_Of
     {
         // this compares the hashes of the objects in an array to an object passed in.
         // if there's a match, it will write out and return the objects that when composited together, 
         // match the hash of the object being matched against.
 
-        public static T FactorOfK<T>(this T k, object[] candidates) where T : IComparable<T>
+        public static T FactorOfK<T>(T k, object[] candidates) where T : IComparable<T>
         {
             return compareToK(candidates, k);
         }
