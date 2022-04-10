@@ -11,7 +11,7 @@ using Windows.UI.Notifications;
 
 namespace Windows_Runtime_Examples.Example_Code
 {
-    internal static  class Toast_Notifier
+    internal static class Toast_Notifier
     {
         public static string NameOfCallingClass(this Task task)
         {
