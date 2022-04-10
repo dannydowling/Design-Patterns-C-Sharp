@@ -64,14 +64,47 @@ namespace Windows_Runtime_Examples.Example_Code
                 source.Add(source2SelectedPath);
                 source.Add(source3SelectedPath);
 
+
+                AsyncCallback callback = new AsyncCallback(ProcessFileName);
+
+                List<string> completedFileNames = new List<string>();  
+
                 AsyncFileCopy asyncFileCopy = new AsyncFileCopy();
-                asyncFileCopy.CopyFileAsync(source, destinationSelectedPath, cancellationToken);
+
+                ProcessFileDelegate processFile = ProcessFileName;
+                IAsyncResult asyncResult = processFile.BeginInvoke((IAsyncResult)completedFileNames, callback, completedFileNames);
+                
+                    asyncFileCopy.CopyFileAsync(source, destinationSelectedPath, cancellationToken);
+                    completedFileNames.Add(destinationSelectedPath);
+               
+                processFile.EndInvoke(asyncResult);
+                
             }
             catch (ArgumentNullException ex)
             {
                 errorDisplay.Text = ex.Message;          
             }
         }
+
+        public delegate void ProcessFileDelegate(IAsyncResult result);
+        
+        public void ProcessFileName(IAsyncResult completedFileNameBeforeAlignment)
+        {
+            List<string> fileNames = new List<string>();
+
+            string fileName = completedFileNameBeforeAlignment.ToString();
+            fileNames.Add(fileName);
+            try
+            {
+                fileNames.Run_CommandLine("contig");
+            }
+            // Store the exception message.
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
 
         private void cancel_Click(object sender, EventArgs e)
         {
