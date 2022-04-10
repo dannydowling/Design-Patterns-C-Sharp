@@ -9,7 +9,7 @@ namespace Windows_Runtime_Examples.Example_Code
 {
     public static class Run_CommandLine_Extension
     {
-        public static string[] unfilteredData { get; set; }
+        public static string[] unfilteredData { get; set; } = { "" };
 
         public static Action Run_CommandLine(this List<string> filepaths, string command)
         {
@@ -38,13 +38,11 @@ namespace Windows_Runtime_Examples.Example_Code
                 return p;
             }
         }
-
         public static void ProcessOutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             unfilteredData.Append(outLine.Data);
             Console.WriteLine(outLine.Data);
         }
-
         public static void ProcessErrorDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             Console.WriteLine(outLine.Data);
