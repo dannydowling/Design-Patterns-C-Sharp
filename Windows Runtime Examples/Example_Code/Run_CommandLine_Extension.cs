@@ -11,7 +11,7 @@ namespace Windows_Runtime_Examples.Example_Code
     {
         public static string[] unfilteredData { get; set; }
 
-        public static Action Run_CommandLine(this string command, List<object> dataSet)
+        public static Action Run_CommandLine(this List<string> filepaths, string command)
         {
             using (Process process = new Process())
             {
@@ -30,10 +30,10 @@ namespace Windows_Runtime_Examples.Example_Code
 
                 Action p = () =>
                 {
-                    foreach (var operand in dataSet)
+                    Parallel.ForEach(filepaths, (file) =>
                     {
-                        process.StandardInput.WriteLine("{0} {1}", command, operand);
-                    }
+                        process.StandardInput.WriteLine("{0} {1}", command, file);
+                    });
                 };
                 return p;
             }
