@@ -28,7 +28,6 @@ namespace DesignPatterns.Sorting
 
         public static IEnumerable<Stream>[] RecursiveModel(this double[] weightArgs, double[] dimensionArgs, Stream[] dataInput)
         {
-
             Console.WriteLine("Regression Trained Probability");
 
             weights = weightArgs;

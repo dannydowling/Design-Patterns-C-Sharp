@@ -14,7 +14,7 @@ namespace Windows_Runtime_Examples.Example_Code
 {
     public partial class FilePickerForCopy : Form
     {
-        string source1SelectedPath { get; set; }
+        string source1SelectedPath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         string? source2SelectedPath { get; set; }
         string? source3SelectedPath { get; set; }
         string destinationSelectedPath { get; set; }
@@ -30,19 +30,19 @@ namespace Windows_Runtime_Examples.Example_Code
         private void Source_1(object sender, EventArgs e)
         {
             var source1 = new FolderBrowserDialog();
-            source1.InitialDirectory = "%User%/Documents/";
+            source1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }
 
         private void Source_2(object sender, EventArgs e)
         {
             var source2 = new FolderBrowserDialog();
-            source2.InitialDirectory = "%User%/Documents/";
+            source2.InitialDirectory = source1SelectedPath;
         }
 
         private void Source_3(object sender, EventArgs e)
         {
             var source3 = new FolderBrowserDialog();
-            source3.InitialDirectory = "%User%/Documents/";
+            source3.InitialDirectory = source1SelectedPath;
         }
 
         private void Set_Destination(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace Windows_Runtime_Examples.Example_Code
             // choose a folder to copy to
 
             var openPicker = new FolderBrowserDialog();
-            openPicker.InitialDirectory = "%User%/Documents/";
+            openPicker.InitialDirectory = source1SelectedPath;
 
             desitinationFolder.Text = openPicker.SelectedPath;
         }
