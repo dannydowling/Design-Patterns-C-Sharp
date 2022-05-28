@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Code_Snippets.Code_Snippets;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace Patterns.Patterns
 {
     public class concreteClass : Object
     {
-        string dataSelector { get; set; }
+        string Name { get; set; }
+        Guid dataId { get; set; }
         byte[] data { get; set; }
         byte[] dataNotStored { get; set; }
 
@@ -45,7 +47,7 @@ namespace Patterns.Patterns
                 {
                     if (base.data == null)
                     {
-                        base.data = dataService.GetFor(dataSelector);
+                        base.data = dataService.GetFor(Name);
                     }
 
                     return base.data;
@@ -57,6 +59,16 @@ namespace Patterns.Patterns
             public static byte[] GetFor(string lookup)
             {
                 var data = new byte[1024];
+                return data;
+            }
+
+            public static concreteClass[][] All()
+            {
+                concreteClass[][] data = new concreteClass[5][];
+
+                data[0] = new concreteClass[5];
+                data[1] = new concreteClass[1024];
+
                 return data;
             }
 
@@ -116,8 +128,36 @@ namespace Patterns.Patterns
                     context.SaveChanges();
                 }
             }
+
+
+            public class specificRepository : GenericRepository<concreteClass>
+            {
+                public specificRepository(SpecificContext context) : base(context)
+                {
+                }
+
+                public override concreteClass Get(Guid id)
+                {
+                    var dataId = context.objects
+                        .Where(c => c.dataId == id)
+                        .Select(c => c.dataId)
+                        .Single();
+
+                    return context.objects.Single(c => c.dataId == id);
+                }
+
+                public override concreteClass Update(concreteClass entity)
+                {
+                    var data = context.objects
+                        .Single(c => c.dataId == entity.dataId);
+
+                    data.Name = entity.Name;
+
+
+                    return base.Update(data);
+                }
+            }
         }
     }
 }
-    
- 
+
