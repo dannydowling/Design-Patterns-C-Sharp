@@ -64,7 +64,6 @@ namespace Windows_Runtime_Examples.Example_Code
                 source.Add(source2SelectedPath);
                 source.Add(source3SelectedPath);
 
-
                 AsyncCallback callback = new AsyncCallback(ProcessFileName);
 
                 List<string> completedFileNames = new List<string>();  
