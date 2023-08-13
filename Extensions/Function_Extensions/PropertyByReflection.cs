@@ -9,8 +9,8 @@ namespace DesignPatterns.Extensions.Function_Extensions
     {
         private static string line;
 
-        public static dynamic findTypeFromProperty<T>(this T propertyToFind) { return findType(propertyToFind.ToString()); }
-        private static Type findType(dynamic propertyToFind)
+        public static dynamic? findTypeFromProperty<T>(this T propertyToFind) { return findType(propertyToFind.ToString()); }
+        private static Type? findType(dynamic propertyToFind)
         {
             using (StreamReader reader = GetEmbeddedResourceStream(Assembly.GetCallingAssembly(), propertyToFind))
             {
@@ -25,7 +25,7 @@ namespace DesignPatterns.Extensions.Function_Extensions
             return null;
         }
 
-        private static dynamic GetEmbeddedResourceStream(Assembly assembly, dynamic resourceFileName)
+        private static dynamic? GetEmbeddedResourceStream(Assembly assembly, dynamic resourceFileName)
         {
             var definedTypes = assembly.DefinedTypes;
             var definedProperties = definedTypes

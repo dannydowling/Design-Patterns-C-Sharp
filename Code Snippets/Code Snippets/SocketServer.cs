@@ -80,25 +80,37 @@ namespace DesignPatterns.SocketServer
         {
             // Signal the main thread to continue.  
             allDone.Set();
+            try
+            {
+                // Get the socket that handles the client request.  
+                Socket? listener = ar.AsyncState as Socket;
+                Socket handler = listener.EndAccept(ar);
 
-            // Get the socket that handles the client request.  
-            Socket listener = (Socket)ar.AsyncState;
-            Socket handler = listener.EndAccept(ar);
-
-            // Create the state object.  
-            StateObject state = new StateObject();
-            state.workSocket = handler;
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), state);
+                // Create the state object.  
+                StateObject state = new StateObject();
+                state.workSocket = handler;
+                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReadCallback), state);
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.Message.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message.ToString());
+            }
+           
         }
 
         public static void ReadCallback(IAsyncResult ar)
         {
+          
             String content = String.Empty;
 
             // Retrieve the state object and the handler socket  
             // from the asynchronous state object.  
-            StateObject state = (StateObject)ar.AsyncState;
+            StateObject? state = ar.AsyncState as StateObject;
             Socket handler = state.workSocket;
 
             // Read data from the client socket.
@@ -146,7 +158,7 @@ namespace DesignPatterns.SocketServer
             try
             {
                 // Retrieve the socket from the state object.  
-                Socket handler = (Socket)ar.AsyncState;
+                Socket? handler = ar.AsyncState as Socket;
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);

@@ -11,7 +11,7 @@ namespace DesignPatterns.SocketClient
     public class StateObject
 {
     // Client socket.  
-    public Socket workSocket = null;
+    public Socket? workSocket = null;
     // Size of receive buffer.  
     public const int BufferSize = 256;
     // Receive buffer.  
@@ -86,7 +86,8 @@ namespace DesignPatterns.SocketClient
                 // Retrieve the socket from the state object.  
                 Socket client = (Socket)ar.AsyncState;
 
-                // Complete the connection.  
+                // Complete the connection.
+                // Null exception is caught if made.
                 client.EndConnect(ar);
 
                 Console.WriteLine("Socket connected to {0}",
@@ -94,6 +95,10 @@ namespace DesignPatterns.SocketClient
 
                 // Signal that the connection has been made.  
                 connectDone.Set();
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.ToString());
             }
             catch (Exception e)
             {
@@ -151,6 +156,10 @@ namespace DesignPatterns.SocketClient
                     receiveDone.Set();
                 }
             }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
@@ -172,7 +181,7 @@ namespace DesignPatterns.SocketClient
             try
             {
                 // Retrieve the socket from the state object.  
-                Socket client = (Socket)ar.AsyncState;
+                Socket? client = ar.AsyncState as Socket;
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
@@ -180,6 +189,10 @@ namespace DesignPatterns.SocketClient
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.ToString());
             }
             catch (Exception e)
             {
